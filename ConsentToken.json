@@ -1,0 +1,14 @@
+"context":{
+  "System": {
+    "user": {
+      "userId": "amzn1.ask.account.<userId_value>",
+      "permissions": {
+        "consentToken": "Atza|MQEWY...6fnLok"
+      }
+    },
+    "device": {
+      "deviceId": <device_id>,
+      "supportedInterfaces": {}
+    }
+  } 
+}
