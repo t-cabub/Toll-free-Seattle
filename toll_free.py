@@ -107,7 +107,7 @@ def get_work_loc_from_session(intent, session):
     session_attributes = {}
     reprompt_text = None
 
-    if session.get('attributes', {}) and "workLocation" in session.get('attributes', {}, and "workLocation" in session.get('attributes', {}):
+   if session.get('attributes', {}) and "workLocation" in session.get('attributes', {}):
         work_loc = session['attributes']['workLocation']
         speech_output = "Your location is " + work_loc + \
                         ". Goodbye."
