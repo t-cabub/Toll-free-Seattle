@@ -77,7 +77,7 @@ def create_work_loc_attributes(work_loc):
     if session.get('attributes', {}) and "workLocation" in session.get('attributes', {}), and "deviceLocation" in session.get('attributes', {}):
         session['attributes']['workLocation'] = work_loc
         return
-    elif session.get('attributes', {}) and "deviceLocation" in session.get('attributes', {}):    
+    elif session.get('attributes', {}) and "deviceLocation" in session.get('attributes', {}):
         device_location = session['attributes']['deviceLocation']
         return {"deviceLocation": device_location, "workLocation": work_loc}
     else
@@ -112,14 +112,14 @@ def set_work_loc_in_session(intent, session):
 
 
 def get_work_loc_from_session(intent, session):
-    session_attributes = {}
+    session_attributes = {};
     reprompt_text = None
 
     if session.get('attributes', {}) and "workLocation" in session.get('attributes', {}):
         work_loc = session['attributes']['workLocation']
         speech_output = "Your location is " + work_loc + \
-                        "."
-        should_end_session = False
+                        ". Goodbye."
+        should_end_session = True
     else:
         speech_output = "I'm not sure what your work location is. " \
                         "You can say, my work location is Microsoft Building 35."
@@ -132,15 +132,7 @@ def get_work_loc_from_session(intent, session):
         intent['name'], speech_output, reprompt_text, should_end_session))
 
 def create_device_location_attributes(device_location):
-    session_attributes = {}
-    if session.get('attributes', {}) and "workLocation" in session.get('attributes', {}), and "deviceLocation" in session.get('attributes', {}):
-        session['attributes']['deviceLocation'] = device_location
-        return
-    elif session.get('attributes', {}) and "workLocation" in session.get('attributes', {}):    
-        work_loc = session['attributes']['workLocation']
-        return {"deviceLocation": device_location, "workLocation": work_loc}
-    else
-        return {"deviceLocation": device_location}
+    return {"deviceLocation": device_location}
 
 def set_device_location_in_session(intent, session):
     """ Sets the device location in the session and prepares the speech to reply to the
@@ -176,8 +168,8 @@ def get_device_location_from_session(intent, session):
     if session.get('attributes', {}) and "deviceLocation" in session.get('attributes', {}):
         device_location = session['attributes']['deviceLocation']
         speech_output = "Your device location is " + device_location + \
-                        "."
-        should_end_session = False
+                        ". Goodbye."
+        should_end_session = True
     else:
         speech_output = "I'm not sure what your device location is. " \
                         "You can say, my device location is 1234 Rainbow Ave Seattle, WA 12345."
