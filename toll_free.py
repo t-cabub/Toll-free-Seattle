@@ -136,10 +136,10 @@ def set_device_location_in_session(intent, session):
     should_end_session = False
 
     if 'DeviceLocation' in intent['slots']:
-        work_loc = intent['slots']['DeviceLocation']['value']
-        session_attributes = create_favorite_color_attributes(favorite_color)
+        device_location = intent['slots']['DeviceLocation']['value']
+        session_attributes = create_device_location_attributes(device_location)
         speech_output = "I now know your device location is " + \
-                        work_loc + \
+                        device_location + \
                         ". You can ask me your commute by saying, " \
                         "what's my commute?"
         reprompt_text = "You can ask me your commute by saying, " \
