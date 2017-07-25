@@ -124,7 +124,26 @@ def get_color_from_session(intent, session):
     return build_response(session_attributes, build_speechlet_response(
         intent['name'], speech_output, reprompt_text, should_end_session))
 
+def get_device_location_from_session(intent, session):
+    session_attributes = {}
+    reprompt_text = None
 
+    if session.get('attributes', {}) and "deviceLocation" in session.get('attributes', {}):
+        device_location = session['attributes']['deviceLocation']
+        speech_output = "Your device location is " + device_location + \
+                        ". Goodbye."
+        should_end_session = True
+    else:
+        speech_output = "I'm not sure what your device location is. " \
+                        "You can say, my device location is 1234 Rainbow Ave Seattle, WA 12345."
+        should_end_session = False
+
+    # Setting reprompt_text to None signifies that we do not want to reprompt
+    # the user. If the user does not respond or says something that is not
+    # understood, the session will end.
+    return build_response(session_attributes, build_speechlet_response(
+        intent['name'], speech_output, reprompt_text, should_end_session))
+        
 # --------------- Events ------------------
 
 def on_session_started(session_started_request, session):
@@ -158,7 +177,7 @@ def on_intent(intent_request, session):
     if intent_name == "GetDeviceLocation":
         return set_color_in_session(intent, session)
     elif intent_name == "GetWorkLocation":
-        return get_color_from_session(intent, session)
+        return get_device_location_from_session(intent, session)
     elif intent_name == "MyDeviceLocationIs":
         return get_color_from_session(intent, session)
     elif intent_name == "MyWorkLocationIs":
