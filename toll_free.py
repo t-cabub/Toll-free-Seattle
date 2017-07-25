@@ -208,9 +208,9 @@ def on_intent(intent_request, session):
     elif intent_name == "GetWorkLocation":
         return get_work_loc_from_session(intent, session)
     elif intent_name == "MyDeviceLocationIs":
-        return get_color_from_session(intent, session)
+        return set_device_location_in_session(intent, session)
     elif intent_name == "MyWorkLocationIs":
-        return set_work_loc_from_session(intent, session)
+        return set_work_loc_in_session(intent, session)
     elif intent_name == "WhatIsMyCommute":
         return get_commute_response(intent, session)
     elif intent_name == "AMAZON.HelpIntent":
