@@ -124,6 +124,7 @@ def get_work_loc_from_session(intent, session):
     return build_response(session_attributes, build_speechlet_response(
         intent['name'], speech_output, reprompt_text, should_end_session))
 
+<<<<<<< HEAD
 def get_work_loc_from_session(intent, session):
     session_attributes = {}
     reprompt_text = None
@@ -144,7 +145,28 @@ def get_work_loc_from_session(intent, session):
     return build_response(session_attributes, build_speechlet_response(
         intent['name'], speech_output, reprompt_text, should_end_session))
 
+=======
+def get_device_location_from_session(intent, session):
+    session_attributes = {}
+    reprompt_text = None
 
+    if session.get('attributes', {}) and "deviceLocation" in session.get('attributes', {}):
+        device_location = session['attributes']['deviceLocation']
+        speech_output = "Your device location is " + device_location + \
+                        ". Goodbye."
+        should_end_session = True
+    else:
+        speech_output = "I'm not sure what your device location is. " \
+                        "You can say, my device location is 1234 Rainbow Ave Seattle, WA 12345."
+        should_end_session = False
+>>>>>>> 77ab4697d7510b3662a29d6e15578769f1f3ec99
+
+    # Setting reprompt_text to None signifies that we do not want to reprompt
+    # the user. If the user does not respond or says something that is not
+    # understood, the session will end.
+    return build_response(session_attributes, build_speechlet_response(
+        intent['name'], speech_output, reprompt_text, should_end_session))
+        
 # --------------- Events ------------------
 
 def on_session_started(session_started_request, session):
@@ -176,7 +198,7 @@ def on_intent(intent_request, session):
 
     # Dispatch to your skill's intent handlers
     if intent_name == "GetDeviceLocation":
-        return set_color_in_session(intent, session)
+        return get_device_location_from_session(intent, session)
     elif intent_name == "GetWorkLocation":
         return get_work_loc_from_session(intent, session)
     elif intent_name == "MyDeviceLocationIs":
