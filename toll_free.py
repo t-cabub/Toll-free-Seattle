@@ -155,9 +155,15 @@ def on_intent(intent_request, session):
     intent_name = intent_request['intent']['name']
 
     # Dispatch to your skill's intent handlers
-    if intent_name == "MyColorIsIntent":
+    if intent_name == "GetDeviceLocation":
         return set_color_in_session(intent, session)
-    elif intent_name == "WhatsMyColorIntent":
+    elif intent_name == "GetWorkLocation":
+        return get_color_from_session(intent, session)
+    elif intent_name == "MyDeviceLocationIs":
+        return get_color_from_session(intent, session)
+    elif intent_name == "MyWorkLocationIs":
+        return get_color_from_session(intent, session)
+    elif intent_name == "WhatIsMyCommute":
         return get_color_from_session(intent, session)
     elif intent_name == "AMAZON.HelpIntent":
         return get_welcome_response()
