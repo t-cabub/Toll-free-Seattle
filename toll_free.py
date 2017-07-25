@@ -110,8 +110,8 @@ def get_work_loc_from_session(intent, session):
    if session.get('attributes', {}) and "workLocation" in session.get('attributes', {}):
         work_loc = session['attributes']['workLocation']
         speech_output = "Your location is " + work_loc + \
-                        ". Goodbye."
-        should_end_session = True
+                        "."
+        should_end_session = False
     else:
         speech_output = "I'm not sure what your work location is. " \
                         "You can say, my work location is Microsoft Building 35."
@@ -160,8 +160,8 @@ def get_device_location_from_session(intent, session):
     if session.get('attributes', {}) and "deviceLocation" in session.get('attributes', {}):
         device_location = session['attributes']['deviceLocation']
         speech_output = "Your device location is " + device_location + \
-                        ". Goodbye."
-        should_end_session = True
+                        "."
+        should_end_session = False
     else:
         speech_output = "I'm not sure what your device location is. " \
                         "You can say, my device location is 1234 Rainbow Ave Seattle, WA 12345."
