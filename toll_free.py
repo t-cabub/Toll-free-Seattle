@@ -76,46 +76,46 @@ def create_favorite_color_attributes(favorite_color):
     return {"favoriteColor": favorite_color}
 
 
-def set_color_in_session(intent, session):
+def set_work_loc_in_session(intent, session):
     """ Sets the color in the session and prepares the speech to reply to the
     user.
     """
 
-    card_title = intent['name']
+    card_title = intent['location']
     session_attributes = {}
     should_end_session = False
 
-    if 'Color' in intent['slots']:
-        favorite_color = intent['slots']['Color']['value']
+    if 'WorkLocation' in intent['slots']:
+        work_loc = intent['slots']['WorkLocation']['value']
         session_attributes = create_favorite_color_attributes(favorite_color)
-        speech_output = "I now know your favorite color is " + \
-                        favorite_color + \
-                        ". You can ask me your favorite color by saying, " \
-                        "what's my favorite color?"
-        reprompt_text = "You can ask me your favorite color by saying, " \
-                        "what's my favorite color?"
+        speech_output = "I now know your work location is " + \
+                        work_loc + \
+                        ". You can ask me your commute by saying, " \
+                        "what's my commute?"
+        reprompt_text = "You can ask me your commute by saying, " \
+                        "what's my commute?"
     else:
-        speech_output = "I'm not sure what your favorite color is. " \
+        speech_output = "I'm not sure what your work location is. " \
                         "Please try again."
-        reprompt_text = "I'm not sure what your favorite color is. " \
-                        "You can tell me your favorite color by saying, " \
-                        "my favorite color is red."
+        reprompt_text = "I'm not sure what your work location is. " \
+                        "You can tell me your work location by saying, " \
+                        "my work location is Microsoft Building 35."
     return build_response(session_attributes, build_speechlet_response(
         card_title, speech_output, reprompt_text, should_end_session))
 
 
-def get_color_from_session(intent, session):
+def get_work_loc_from_session(intent, session):
     session_attributes = {}
     reprompt_text = None
 
-    if session.get('attributes', {}) and "favoriteColor" in session.get('attributes', {}):
-        favorite_color = session['attributes']['favoriteColor']
-        speech_output = "Your favorite color is " + favorite_color + \
+    if session.get('attributes', {}) and "workLocation" in session.get('attributes', {}):
+        work_loc = session['attributes']['workLocation']
+        speech_output = "Your location is " + work_loc + \
                         ". Goodbye."
         should_end_session = True
     else:
-        speech_output = "I'm not sure what your favorite color is. " \
-                        "You can say, my favorite color is red."
+        speech_output = "I'm not sure what your work location is. " \
+                        "You can say, my work location is Microsoft Building 35."
         should_end_session = False
 
     # Setting reprompt_text to None signifies that we do not want to reprompt
@@ -175,13 +175,13 @@ def on_intent(intent_request, session):
 
     # Dispatch to your skill's intent handlers
     if intent_name == "GetDeviceLocation":
-        return set_color_in_session(intent, session)
-    elif intent_name == "GetWorkLocation":
         return get_device_location_from_session(intent, session)
+    elif intent_name == "GetWorkLocation":
+        return get_work_loc_from_session(intent, session)
     elif intent_name == "MyDeviceLocationIs":
         return get_color_from_session(intent, session)
     elif intent_name == "MyWorkLocationIs":
-        return get_color_from_session(intent, session)
+        return set_work_loc_from_session(intent, session)
     elif intent_name == "WhatIsMyCommute":
         return get_color_from_session(intent, session)
     elif intent_name == "AMAZON.HelpIntent":
