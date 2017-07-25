@@ -71,9 +71,8 @@ def handle_session_end_request():
     return build_response({}, build_speechlet_response(
         card_title, speech_output, None, should_end_session))
 
-
 def create_work_loc_attributes(work_loc):
-    if session.get('attributes', {}) and "workLocation" in session.get('attributes', {}), and "deviceLocation" in session.get('attributes', {}):
+    if session.get('attributes', {}) and "workLocation" in session.get('attributes', {}) and "deviceLocation" in session.get('attributes', {}):
         session['attributes']['workLocation'] = work_loc
         return
     elif session.get('attributes', {}) and "deviceLocation" in session.get('attributes', {}):
@@ -111,7 +110,7 @@ def set_work_loc_in_session(intent, session):
 
 
 def get_work_loc_from_session(intent, session):
-    session_attributes = {};
+    session_attributes = {}
     reprompt_text = None
 
     if session.get('attributes', {}) and "workLocation" in session.get('attributes', {}):
@@ -131,7 +130,7 @@ def get_work_loc_from_session(intent, session):
         intent['name'], speech_output, reprompt_text, should_end_session))
 
 def create_device_location_attributes(device_location):
-    if session.get('attributes', {}) and "workLocation" in session.get('attributes', {}), and "deviceLocation" in session.get('attributes', {}):
+    if session.get('attributes', {}) and "workLocation" in session.get('attributes', {}) and "deviceLocation" in session.get('attributes', {}):
         session['attributes']['deviceLocation'] = device_location
         return
     elif session.get('attributes', {}) and "workLocation" in session.get('attributes', {}):    
