@@ -72,8 +72,8 @@ def handle_session_end_request():
         card_title, speech_output, None, should_end_session))
 
 
-def create_favorite_color_attributes(favorite_color):
-    return {"favoriteColor": favorite_color}
+def create_favorite_color_attributes(work_loc):
+    return {"workLocation": work_loc}
 
 
 def set_work_loc_in_session(intent, session):
@@ -87,7 +87,7 @@ def set_work_loc_in_session(intent, session):
 
     if 'WorkLocation' in intent['slots']:
         work_loc = intent['slots']['WorkLocation']['value']
-        session_attributes = create_favorite_color_attributes(favorite_color)
+        session_attributes = create_work_loc_attributes(work_loc)
         speech_output = "I now know your work location is " + \
                         work_loc + \
                         ". You can ask me your commute by saying, " \
@@ -109,6 +109,26 @@ def get_work_loc_from_session(intent, session):
     reprompt_text = None
 
     if session.get('attributes', {}) and "workLocation" in session.get('attributes', {}):
+        work_loc = session['attributes']['workLocation']
+        speech_output = "Your location is " + work_loc + \
+                        ". Goodbye."
+        should_end_session = True
+    else:
+        speech_output = "I'm not sure what your work location is. " \
+                        "You can say, my work location is Microsoft Building 35."
+        should_end_session = False
+
+    # Setting reprompt_text to None signifies that we do not want to reprompt
+    # the user. If the user does not respond or says something that is not
+    # understood, the session will end.
+    return build_response(session_attributes, build_speechlet_response(
+        intent['name'], speech_output, reprompt_text, should_end_session))
+
+def get_work_loc_from_session(intent, session):
+    session_attributes = {}
+    reprompt_text = None
+
+    if session.get('attributes', {}) and "workLocation" in session.get('attributes', {}, and "workLocation" in session.get('attributes', {}):
         work_loc = session['attributes']['workLocation']
         speech_output = "Your location is " + work_loc + \
                         ". Goodbye."
@@ -164,7 +184,7 @@ def on_intent(intent_request, session):
     elif intent_name == "MyWorkLocationIs":
         return set_work_loc_from_session(intent, session)
     elif intent_name == "WhatIsMyCommute":
-        return get_color_from_session(intent, session)
+        return get_commute_response(intent, session)
     elif intent_name == "AMAZON.HelpIntent":
         return get_welcome_response()
     elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
