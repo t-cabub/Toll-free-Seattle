@@ -73,7 +73,6 @@ def handle_session_end_request():
 
 
 def create_work_loc_attributes(work_loc):
-    session_attributes = {}
     if session.get('attributes', {}) and "workLocation" in session.get('attributes', {}), and "deviceLocation" in session.get('attributes', {}):
         session['attributes']['workLocation'] = work_loc
         return
@@ -132,7 +131,14 @@ def get_work_loc_from_session(intent, session):
         intent['name'], speech_output, reprompt_text, should_end_session))
 
 def create_device_location_attributes(device_location):
-    return {"deviceLocation": device_location}
+    if session.get('attributes', {}) and "workLocation" in session.get('attributes', {}), and "deviceLocation" in session.get('attributes', {}):
+        session['attributes']['deviceLocation'] = device_location
+        return
+    elif session.get('attributes', {}) and "workLocation" in session.get('attributes', {}):    
+        work_loc = session['attributes']['workLocation']
+        return {"deviceLocation": device_location, "workLocation": work_loc}
+    else
+        return {"deviceLocation": device_location}
 
 def set_device_location_in_session(intent, session):
     """ Sets the device location in the session and prepares the speech to reply to the
