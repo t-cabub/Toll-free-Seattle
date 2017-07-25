@@ -2,7 +2,6 @@
 This sample demonstrates a simple skill built with the Amazon Alexa Skills Kit.
 The Intent Schema, Custom Slots, and Sample Utterances for this skill, as well
 as testing instructions are located at http://amzn.to/1LzFrj6
-
 For additional samples, visit the Alexa Skills Kit Getting Started guide at
 http://amzn.to/1LGWsLG
 """
@@ -71,15 +70,14 @@ def handle_session_end_request():
     return build_response({}, build_speechlet_response(
         card_title, speech_output, None, should_end_session))
 
-
 def create_work_loc_attributes(work_loc):
-    if session.get('attributes', {}) and "workLocation" in session.get('attributes', {}), and "deviceLocation" in session.get('attributes', {}):
+    if session.get('attributes', {}) and "workLocation" in session.get('attributes', {}) and "deviceLocation" in session.get('attributes', {}):
         session['attributes']['workLocation'] = work_loc
         return
     elif session.get('attributes', {}) and "deviceLocation" in session.get('attributes', {}):
         device_location = session['attributes']['deviceLocation']
         return {"deviceLocation": device_location, "workLocation": work_loc}
-    else
+    else:
         return {"workLocation": work_loc}
 
 def set_work_loc_in_session(intent, session):
@@ -111,7 +109,7 @@ def set_work_loc_in_session(intent, session):
 
 
 def get_work_loc_from_session(intent, session):
-    session_attributes = {};
+    session_attributes = {}
     reprompt_text = None
 
     if session.get('attributes', {}) and "workLocation" in session.get('attributes', {}):
@@ -131,13 +129,13 @@ def get_work_loc_from_session(intent, session):
         intent['name'], speech_output, reprompt_text, should_end_session))
 
 def create_device_location_attributes(device_location):
-    if session.get('attributes', {}) and "workLocation" in session.get('attributes', {}), and "deviceLocation" in session.get('attributes', {}):
+    if session.get('attributes', {}) and "workLocation" in session.get('attributes', {}) and "deviceLocation" in session.get('attributes', {}):
         session['attributes']['deviceLocation'] = device_location
         return
     elif session.get('attributes', {}) and "workLocation" in session.get('attributes', {}):    
         work_loc = session['attributes']['workLocation']
         return {"deviceLocation": device_location, "workLocation": work_loc}
-    else
+    else:
         return {"deviceLocation": device_location}
 
 def set_device_location_in_session(intent, session):
@@ -237,7 +235,6 @@ def on_intent(intent_request, session):
 
 def on_session_ended(session_ended_request, session):
     """ Called when the user ends the session.
-
     Is not called when the skill returns should_end_session=true
     """
     print("on_session_ended requestId=" + session_ended_request['requestId'] +
