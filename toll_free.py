@@ -75,7 +75,6 @@ def handle_session_end_request():
 def create_favorite_color_attributes(favorite_color):
     return {"favoriteColor": favorite_color}
 
-
 def set_work_loc_in_session(intent, session):
     """ Sets the color in the session and prepares the speech to reply to the
     user.
@@ -123,6 +122,36 @@ def get_work_loc_from_session(intent, session):
     # understood, the session will end.
     return build_response(session_attributes, build_speechlet_response(
         intent['name'], speech_output, reprompt_text, should_end_session))
+
+def create_device_location_attributes(device_location):
+    return {"deviceLocation": device_location}
+
+def set_device_location_in_session(intent, session):
+    """ Sets the device location in the session and prepares the speech to reply to the
+    user.
+    """
+
+    card_title = intent['name']
+    session_attributes = {}
+    should_end_session = False
+
+    if 'DeviceLocation' in intent['slots']:
+        work_loc = intent['slots']['DeviceLocation']['value']
+        session_attributes = create_favorite_color_attributes(favorite_color)
+        speech_output = "I now know your device location is " + \
+                        work_loc + \
+                        ". You can ask me your commute by saying, " \
+                        "what's my commute?"
+        reprompt_text = "You can ask me your commute by saying, " \
+                        "what's my commute?"
+    else:
+        speech_output = "I'm not sure what your device location is. " \
+                        "Please try again."
+        reprompt_text = "I'm not sure what your device location is. " \
+                        "You can tell me your device location by saying, " \
+                        "my work location is 1234 Rainbow Ave Seattle, WA 12345."
+    return build_response(session_attributes, build_speechlet_response(
+        card_title, speech_output, reprompt_text, should_end_session))
 
 def get_device_location_from_session(intent, session):
     session_attributes = {}
