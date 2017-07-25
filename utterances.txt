@@ -1,0 +1,15 @@
+MyWorkLocationIs my work location is {WorkLocation}
+MyDeviceLocationIs my device location is {DeviceLocation}
+GetDeviceLocation where am I 
+GetDeviceLocation what is my current location
+GetDeviceLocation what is my current address
+GetDeviceLocation what is my location
+GetDeviceLocation what is my device location
+GetWorkLocation what is my work location
+GetWorkLocation where is my work
+GetWorkLocation what is my work address
+WhatIsMyCommute what is my commute
+WhatIsMyCommute take me to work
+WhatIsMyCommute What is the fastest route 
+WhatIsMyCommute What is the fastest route to work
+WhatIsMyCommute How do I get to work

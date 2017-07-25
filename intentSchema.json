@@ -1,0 +1,34 @@
+{
+  "intents": [
+    {
+      "slots": [
+        {
+          "name": "WorkLocation",
+          "type": "LOCATION"
+        }
+      ],
+      "intent": "MyWorkLocationIs"
+    },
+    {
+      "slots": [
+        {
+          "name": "DeviceLocation",
+          "type": "LOCATION"
+        }
+      ],
+      "intent": "MyDeviceLocationIs"
+    },
+    {
+      "intent": "WhatIsMyCommute"
+    },
+        {
+      "intent": "GetDeviceLocation"
+    },
+        {
+      "intent": "GetWorkLocation"
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    }
+  ]
+}
