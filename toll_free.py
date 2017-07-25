@@ -72,7 +72,7 @@ def handle_session_end_request():
         card_title, speech_output, None, should_end_session))
 
 
-def create_favorite_color_attributes(work_loc):
+def create_work_loc_attributes(work_loc):
     return {"workLocation": work_loc}
 
 
@@ -81,7 +81,7 @@ def set_work_loc_in_session(intent, session):
     user.
     """
 
-    card_title = intent['location']
+    card_title = intent['name']
     session_attributes = {}
     should_end_session = False
 
@@ -108,27 +108,6 @@ def get_work_loc_from_session(intent, session):
     session_attributes = {}
     reprompt_text = None
 
-    if session.get('attributes', {}) and "workLocation" in session.get('attributes', {}):
-        work_loc = session['attributes']['workLocation']
-        speech_output = "Your location is " + work_loc + \
-                        ". Goodbye."
-        should_end_session = True
-    else:
-        speech_output = "I'm not sure what your work location is. " \
-                        "You can say, my work location is Microsoft Building 35."
-        should_end_session = False
-
-    # Setting reprompt_text to None signifies that we do not want to reprompt
-    # the user. If the user does not respond or says something that is not
-    # understood, the session will end.
-    return build_response(session_attributes, build_speechlet_response(
-        intent['name'], speech_output, reprompt_text, should_end_session))
-
-<<<<<<< HEAD
-def get_work_loc_from_session(intent, session):
-    session_attributes = {}
-    reprompt_text = None
-
     if session.get('attributes', {}) and "workLocation" in session.get('attributes', {}, and "workLocation" in session.get('attributes', {}):
         work_loc = session['attributes']['workLocation']
         speech_output = "Your location is " + work_loc + \
@@ -145,7 +124,6 @@ def get_work_loc_from_session(intent, session):
     return build_response(session_attributes, build_speechlet_response(
         intent['name'], speech_output, reprompt_text, should_end_session))
 
-=======
 def get_device_location_from_session(intent, session):
     session_attributes = {}
     reprompt_text = None
@@ -159,7 +137,6 @@ def get_device_location_from_session(intent, session):
         speech_output = "I'm not sure what your device location is. " \
                         "You can say, my device location is 1234 Rainbow Ave Seattle, WA 12345."
         should_end_session = False
->>>>>>> 77ab4697d7510b3662a29d6e15578769f1f3ec99
 
     # Setting reprompt_text to None signifies that we do not want to reprompt
     # the user. If the user does not respond or says something that is not
