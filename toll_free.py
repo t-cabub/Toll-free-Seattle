@@ -11,7 +11,7 @@ from __future__ import print_function
 
 # --------------- Helpers that build all of the responses ----------------------
 
-def buildSpeechletResponse(title, output, reprompt_text, should_end_session):
+def build_speechlet_response(title, output, reprompt_text, should_end_session):
     return {
         'outputSpeech': {
             'type': 'PlainText',
@@ -32,7 +32,7 @@ def buildSpeechletResponse(title, output, reprompt_text, should_end_session):
     }
 
 
-def buildResponse(device_location, work_location, speechlet_response):
+def build_response(device_location, work_location, speechlet_response):
     return {
         'version': '1.0',
         'sessionAttributes': {
