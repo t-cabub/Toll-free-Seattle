@@ -70,11 +70,8 @@ def handle_session_end_request():
     return build_response({}, build_speechlet_response(
         card_title, speech_output, None, should_end_session))
 
-def create_work_loc_attributes(work_loc):
-    if session.get('attributes', {}) and "workLocation" in session.get('attributes', {}) and "deviceLocation" in session.get('attributes', {}):
-        session['attributes']['workLocation'] = work_loc
-        return session_attributes
-    elif session.get('attributes', {}) and "deviceLocation" in session.get('attributes', {}):
+def change_work_loc_attributes(work_loc):
+    if session.get('attributes', {}) and "deviceLocation" in session.get('attributes', {}):
         device_location = session['attributes']['deviceLocation']
         return {"deviceLocation": device_location, "workLocation": work_loc}
     else:
@@ -91,7 +88,7 @@ def set_work_loc_in_session(intent, session):
 
     if 'WorkLocation' in intent['slots']:
         work_loc = intent['slots']['WorkLocation']['value']
-        session_attributes = create_work_loc_attributes(work_loc)
+        session_attributes = change_work_loc_attributes(work_loc)
         speech_output = "I now know your work location is " + \
                         work_loc + \
                         ". You can ask me your commute by saying, " \
@@ -129,13 +126,12 @@ def get_work_loc_from_session(intent, session):
         intent['name'], speech_output, reprompt_text, should_end_session))
 
 def create_device_location_attributes(device_location):
-    if session.get('attributes', {}) and "workLocation" in session.get('attributes', {}) and "deviceLocation" in session.get('attributes', {}):
-        session['attributes']['deviceLocation'] = device_location
-        return session_attributes
-    elif session.get('attributes', {}) and "workLocation" in session.get('attributes', {}):    
+    """
+    if session.get('attributes', {}) and "workLocation" in session.get('attributes', {}):    
         work_loc = session['attributes']['workLocation']
         return {"deviceLocation": device_location, "workLocation": work_loc}
     else:
+    """
         return {"deviceLocation": device_location}
 
 def set_device_location_in_session(intent, session):
@@ -255,10 +251,11 @@ def lambda_handler(event, context):
     Uncomment this if statement and populate with your skill's application ID to
     prevent someone else from configuring a skill that sends requests to this
     function.
-    """
+    
     if (event['session']['application']['applicationId'] !=
              "amzn1.ask.skill.54f5f11f-8c4d-401e-8777-264d22fdfd2f"):
          raise ValueError("Invalid Application ID")
+     """
 
     if event['session']['new']:
         on_session_started({'requestId': event['request']['requestId']},
