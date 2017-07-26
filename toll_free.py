@@ -173,6 +173,27 @@ def get_device_location_from_session(intent, session):
     # understood, the session will end.
     return build_response(device_location, work_location, build_speechlet_response(
         intent['name'], speech_output, reprompt_text, should_end_session))
+
+def get_commute_response(intent, session)
+    reprompt_text = None
+
+    work_location = session['attributes']['workLocation']
+    device_location = session['attributes']['deviceLocation']
+    should_end_session = True
+
+    #try to get the device location with the API and reset the device_location var if you can
+
+    #use google maps API to calc time for both routes and miles
+
+    #store the toll stuff, query time, return actual toll
+
+    #calculate which one is better
+
+    #make sure to set speech_output to the result otherwise the method will fail
+
+    return build_response(device_location, work_location, build_speechlet_response(
+        intent['name'], speech_output, reprompt_text, should_end_session))
+
         
 # --------------- Events ------------------
 
