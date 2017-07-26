@@ -11,7 +11,7 @@ from __future__ import print_function
 
 # --------------- Helpers that build all of the responses ----------------------
 
-def build_speechlet_response(title, output, reprompt_text, should_end_session):
+def buildSpeechletResponse(title, output, reprompt_text, should_end_session):
     return {
         'outputSpeech': {
             'type': 'PlainText',
@@ -32,10 +32,13 @@ def build_speechlet_response(title, output, reprompt_text, should_end_session):
     }
 
 
-def build_response(session_attributes, speechlet_response):
+def buildResponse(device_location, work_location, speechlet_response):
     return {
         'version': '1.0',
-        'sessionAttributes': session_attributes,
+        'sessionAttributes': {
+            'deviceLocation' : device_location,
+            'workLocation' : work_location
+        },
         'response': speechlet_response
     }
 
@@ -47,50 +50,42 @@ def get_welcome_response():
     add those here
     """
 
-    session_attributes = {}
     card_title = "Welcome"
-    speech_output = "Welcome to the Alexa Skills Kit sample. " \
-                    "Please tell me your favorite color by saying, " \
-                    "my favorite color is red"
+    speech_output = "Welcome to Toll Free Seattle. " \
+                    "Please tell me your work location by saying, " \
+                    "my work location is Microsoft Building 35"
     # If the user either does not reply to the welcome message or says something
     # that is not understood, they will be prompted again with this text.
-    reprompt_text = "Please tell me your favorite color by saying, " \
-                    "my favorite color is red."
+    reprompt_text = "Please tell me your work location by saying, " \
+                    "my work location is Microsoft Building 35."
     should_end_session = False
-    return build_response(session_attributes, build_speechlet_response(
+    return build_response("none", "none", build_speechlet_response(
         card_title, speech_output, reprompt_text, should_end_session))
 
 
 def handle_session_end_request():
     card_title = "Session Ended"
-    speech_output = "Thank you for trying the Alexa Skills Kit sample. " \
+    speech_output = "Thank you for trying Toll Free Seattle. " \
                     "Have a nice day! "
     # Setting this to true ends the session and exits the skill.
     should_end_session = True
-    return build_response({}, build_speechlet_response(
+    return build_response("none", "none", build_speechlet_response(
         card_title, speech_output, None, should_end_session))
 
-def change_work_loc_attributes(work_loc):
-    if session.get('attributes', {}) and "deviceLocation" in session.get('attributes', {}):
-        device_location = session['attributes']['deviceLocation']
-        return {"deviceLocation": device_location, "workLocation": work_loc}
-    else:
-        return {"workLocation": work_loc}
-
-def set_work_loc_in_session(intent, session):
+def set_work_location_in_session(intent, session):
     """ Sets the color in the session and prepares the speech to reply to the
     user.
     """
 
     card_title = intent['name']
-    session_attributes = {}
     should_end_session = False
+    work_location = session['attributes']['workLocation']
+    device_location = session['attributes']['deviceLocation']
 
     if 'WorkLocation' in intent['slots']:
-        work_loc = intent['slots']['WorkLocation']['value']
-        session_attributes = change_work_loc_attributes(work_loc)
+        work_location = intent['slots']['WorkLocation']['value']
         speech_output = "I now know your work location is " + \
-                        work_loc + \
+                        work_location + \
                         ". You can ask me your commute by saying, " \
                         "what's my commute?"
         reprompt_text = "You can ask me your commute by saying, " \
@@ -101,19 +96,22 @@ def set_work_loc_in_session(intent, session):
         reprompt_text = "I'm not sure what your work location is. " \
                         "You can tell me your work location by saying, " \
                         "my work location is Microsoft Building 35."
-    return build_response(session_attributes, build_speechlet_response(
+    return build_response(device_location, work_location, build_speechlet_response(
         card_title, speech_output, reprompt_text, should_end_session))
 
+def create_work_location_attributes(work_location):
+    return {"workLocation": work_location}
 
-def get_work_loc_from_session(intent, session):
-    session_attributes = {}
+def get_work_location_from_session(intent, session):
     reprompt_text = None
 
+    work_location = session['attributes']['workLocation']
+    device_location = session['attributes']['deviceLocation']
     if session.get('attributes', {}) and "workLocation" in session.get('attributes', {}):
-        work_loc = session['attributes']['workLocation']
-        speech_output = "Your location is " + work_loc + \
-                        ". Goodbye."
-        should_end_session = True
+        work_location = session['attributes']['workLocation']
+        speech_output = "Your location is " + work_location + \
+                        "."
+        should_end_session = False
     else:
         speech_output = "I'm not sure what your work location is. " \
                         "You can say, my work location is Microsoft Building 35."
@@ -122,17 +120,8 @@ def get_work_loc_from_session(intent, session):
     # Setting reprompt_text to None signifies that we do not want to reprompt
     # the user. If the user does not respond or says something that is not
     # understood, the session will end.
-    return build_response(session_attributes, build_speechlet_response(
+    return build_response(device_location, work_location, build_speechlet_response(
         intent['name'], speech_output, reprompt_text, should_end_session))
-
-def create_device_location_attributes(device_location):
-    """
-    if session.get('attributes', {}) and "workLocation" in session.get('attributes', {}):    
-        work_loc = session['attributes']['workLocation']
-        return {"deviceLocation": device_location, "workLocation": work_loc}
-    else:
-    """
-        return {"deviceLocation": device_location}
 
 def set_device_location_in_session(intent, session):
     """ Sets the device location in the session and prepares the speech to reply to the
@@ -140,12 +129,12 @@ def set_device_location_in_session(intent, session):
     """
 
     card_title = intent['name']
-    session_attributes = {}
     should_end_session = False
 
+    work_location = session['attributes']['workLocation']
+    device_location = session['attributes']['deviceLocation']
     if 'DeviceLocation' in intent['slots']:
         device_location = intent['slots']['DeviceLocation']['value']
-        session_attributes = create_device_location_attributes(device_location)
         speech_output = "I now know your device location is " + \
                         device_location + \
                         ". You can ask me your commute by saying, " \
@@ -158,18 +147,22 @@ def set_device_location_in_session(intent, session):
         reprompt_text = "I'm not sure what your device location is. " \
                         "You can tell me your device location by saying, " \
                         "my work location is 1234 Rainbow Ave Seattle, WA 12345."
-    return build_response(session_attributes, build_speechlet_response(
+    return build_response(device_location, work_location, build_speechlet_response(
         card_title, speech_output, reprompt_text, should_end_session))
 
+def create_device_location_attributes(device_location):
+    return {"deviceLocation": device_location}
+
 def get_device_location_from_session(intent, session):
-    session_attributes = {}
     reprompt_text = None
 
+    work_location = session['attributes']['workLocation']
+    device_location = session['attributes']['deviceLocation']
     if session.get('attributes', {}) and "deviceLocation" in session.get('attributes', {}):
         device_location = session['attributes']['deviceLocation']
         speech_output = "Your device location is " + device_location + \
-                        ". Goodbye."
-        should_end_session = True
+                        "."
+        should_end_session = False
     else:
         speech_output = "I'm not sure what your device location is. " \
                         "You can say, my device location is 1234 Rainbow Ave Seattle, WA 12345."
@@ -178,7 +171,7 @@ def get_device_location_from_session(intent, session):
     # Setting reprompt_text to None signifies that we do not want to reprompt
     # the user. If the user does not respond or says something that is not
     # understood, the session will end.
-    return build_response(session_attributes, build_speechlet_response(
+    return build_response(device_location, work_location, build_speechlet_response(
         intent['name'], speech_output, reprompt_text, should_end_session))
         
 # --------------- Events ------------------
@@ -214,11 +207,11 @@ def on_intent(intent_request, session):
     if intent_name == "GetDeviceLocation":
         return get_device_location_from_session(intent, session)
     elif intent_name == "GetWorkLocation":
-        return get_work_loc_from_session(intent, session)
+        return get_work_location_from_session(intent, session)
     elif intent_name == "MyDeviceLocationIs":
         return set_device_location_in_session(intent, session)
     elif intent_name == "MyWorkLocationIs":
-        return set_work_loc_in_session(intent, session)
+        return set_work_location_in_session(intent, session)
     elif intent_name == "WhatIsMyCommute":
         return get_commute_response(intent, session)
     elif intent_name == "AMAZON.HelpIntent":
@@ -258,12 +251,11 @@ def lambda_handler(event, context):
      """
 
     if event['session']['new']:
-        on_session_started({'requestId': event['request']['requestId']},
-                           event['session'])
-
+        event['session']['attributes'] = {}
+        on_session_started( {'requestId': event['request']['requestId'] }, event['session'])
+    if event['request']['type'] == 'IntentRequest':
+        return on_intent(event['request'], event['session'])
     if event['request']['type'] == "LaunchRequest":
         return on_launch(event['request'], event['session'])
-    elif event['request']['type'] == "IntentRequest":
-        return on_intent(event['request'], event['session'])
-    elif event['request']['type'] == "SessionEndedRequest":
+    if event['request']['type'] == "SessionEndedRequest":
         return on_session_ended(event['request'], event['session'])
